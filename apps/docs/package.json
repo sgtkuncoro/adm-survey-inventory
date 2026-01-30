@@ -1,0 +1,22 @@
+{
+  "name": "docs",
+  "version": "0.0.0",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "@packages/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@storybook/react": "^7.6.0",
+    "@storybook/react-vite": "^7.6.0",
+    "@storybook/addon-essentials": "^7.6.0",
+    "@storybook/addon-links": "^7.6.0",
+    "@storybook/blocks": "^7.6.0",
+    "storybook": "^7.6.0",
+    "vite": "^5.0.0"
+  }
+}

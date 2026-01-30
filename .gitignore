@@ -1,0 +1,61 @@
+# Basics
+node_modules/
+dist/
+build/
+.DS_Store
+*.log
+*.log.*
+
+# Environment
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Editors
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Turborepo
+.turbo/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# Cloudflare Workers
+.wrangler/
+worker-configuration.d.ts
+
+# Drizzle / Database
+# Keep migrations, but ignore potential local SQLite dev files if any
+*.sqlite
+*.db
+
+# Supabase
+# Ignore generated types if they are volatile, but usually we commit them. 
+# If you prefer generating them in CI only:
+# packages/supabase/src/types/database.types.ts
+
+# Packages
+packages/*/dist/
+packages/*/build/
+packages/*/tsconfig.tsbuildinfo
+
+# Storybook
+storybook-static/
+
+# Testing
+coverage/
+playwright-report/
+test-results/
+
+# Agent (Anthropic/Gemini) - OPTIONAL
+# Keeping .agent in git is usually good for sharing shared context, 
+# but if you want it private:
+# .agent/

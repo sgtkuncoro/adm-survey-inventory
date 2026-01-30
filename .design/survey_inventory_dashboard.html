@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survey Inventory | ShopperArmy Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pink: {
+              primary: '#E94B7C',
+              dark: '#D63A6B',
+              light: '#FEE8F0',
+            },
+            green: {
+              primary: '#10B981',
+              light: '#D1FAE5',
+              dark: '#059669',
+            },
+            blue: {
+              primary: '#0066CC',
+              light: '#DBEAFE',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    
+    .table-row:hover {
+      background-color: #F9FAFB;
+    }
+    
+    .progress-bar {
+      height: 6px;
+      border-radius: 3px;
+      background: #E5E7EB;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    
+    .expandable-row {
+      display: none;
+    }
+    
+    .expandable-row.expanded {
+      display: table-row;
+    }
+    
+    .chevron {
+      transition: transform 0.2s ease;
+    }
+    
+    .chevron.rotated {
+      transform: rotate(90deg);
+    }
+    
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      color: #6B7280;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .sidebar-link:hover {
+      background: #F3F4F6;
+      color: #374151;
+    }
+    
+    .sidebar-link.active {
+      background: #FEE8F0;
+      color: #E94B7C;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  
+  <!-- Layout Container -->
+  <div class="flex">
+    
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 min-h-screen fixed left-0 top-0">
+      <!-- Logo -->
+      <div class="p-6 border-b border-gray-100">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-pink-primary rounded-xl flex items-center justify-center">
+            <span class="text-white font-bold text-lg">SA</span>
+          </div>
+          <div>
+            <div class="font-bold text-gray-900">ShopperArmy</div>
+            <div class="text-xs text-gray-500">Admin Dashboard</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Navigation -->
+      <nav class="p-4 space-y-1">
+        <a href="#" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+          Dashboard
+        </a>
+        <a href="#" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+          Missions
+        </a>
+        <a href="#" class="sidebar-link active">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          Survey Inventory
+        </a>
+        <a href="#" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+          </svg>
+          Users
+        </a>
+        <a href="#" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          Payouts
+        </a>
+        
+        <div class="pt-4 mt-4 border-t border-gray-100">
+          <div class="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+            Integrations
+          </div>
+          <a href="#" class="sidebar-link">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+            </svg>
+            API Providers
+          </a>
+          <a href="#" class="sidebar-link">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            Qualification Legend
+          </a>
+        </div>
+      </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="ml-64 flex-1 p-8">
+      
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Survey Inventory</h1>
+          <p class="text-gray-500 mt-1">External survey opportunities from API providers</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 text-sm text-gray-500">
+            <div class="w-2 h-2 bg-green-primary rounded-full animate-pulse"></div>
+            Last synced: 12 mins ago
+          </div>
+          <button class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            Sync Now
+          </button>
+        </div>
+      </div>
+      
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 bg-blue-light rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-blue-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+            </div>
+            <span class="pill bg-green-light text-green-primary">+3 new</span>
+          </div>
+          <div class="text-3xl font-bold text-gray-900">20</div>
+          <div class="text-sm text-gray-500 mt-1">Active Surveys</div>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 bg-green-light rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-green-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="text-3xl font-bold text-gray-900">$3.73</div>
+          <div class="text-sm text-gray-500 mt-1">Avg CPI</div>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 bg-pink-light rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-pink-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="text-3xl font-bold text-gray-900">78,796</div>
+          <div class="text-sm text-gray-500 mt-1">Total Slots Available</div>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="text-3xl font-bold text-gray-900">25 min</div>
+          <div class="text-sm text-gray-500 mt-1">Avg Survey Length</div>
+        </div>
+      </div>
+      
+      <!-- Filters -->
+      <div class="bg-white rounded-xl border border-gray-100 shadow-sm mb-6">
+        <div class="p-4 border-b border-gray-100">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <!-- Provider Filter -->
+              <select class="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-primary focus:border-transparent">
+                <option>All Providers</option>
+                <option>Morning Consult</option>
+                <option>Lucid (Coming Soon)</option>
+                <option>Cint (Coming Soon)</option>
+              </select>
+              
+              <!-- Status Filter -->
+              <select class="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-primary focus:border-transparent">
+                <option>All Status</option>
+                <option>Open</option>
+                <option>Closed</option>
+              </select>
+              
+              <!-- CPI Filter -->
+              <select class="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-primary focus:border-transparent">
+                <option>Any CPI</option>
+                <option>$3.00+</option>
+                <option>$3.50+</option>
+                <option>$4.00+</option>
+              </select>
+              
+              <!-- Length Filter -->
+              <select class="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-primary focus:border-transparent">
+                <option>Any Length</option>
+                <option>Under 20 min</option>
+                <option>20-30 min</option>
+                <option>30+ min</option>
+              </select>
+            </div>
+            
+            <!-- Search -->
+            <div class="relative">
+              <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+              <input type="text" placeholder="Search by ID or topic..." class="pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-pink-primary focus:border-transparent">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-100">
+                <th class="text-left py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Provider</th>
+                <th class="text-left py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Survey ID</th>
+                <th class="text-left py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Topic</th>
+                <th class="text-left py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Length</th>
+                <th class="text-left py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">CPI Range</th>
+                <th class="text-left py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Quotas</th>
+                <th class="text-left py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Fill Progress</th>
+                <th class="text-left py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="text-left py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Expires</th>
+                <th class="text-left py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1 -->
+              <tr class="table-row border-b border-gray-50 cursor-pointer" onclick="toggleRow('row1')">
+                <td class="py-4 px-6">
+                  <span class="pill bg-purple-100 text-purple-700">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                    Morning Consult
+                  </span>
+                </td>
+                <td class="py-4 px-6 font-mono text-sm text-gray-600">9c094c11...de80</td>
+                <td class="py-4 px-6 text-gray-900 font-medium">General</td>
+                <td class="py-4 px-6 text-gray-700">24.6 min</td>
+                <td class="py-4 px-6">
+                  <span class="text-green-primary font-semibold">$1.05 - $4.00</span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-gray-100 text-gray-700">16 quotas</span>
+                </td>
+                <td class="py-4 px-6 w-40">
+                  <div class="flex items-center gap-3">
+                    <div class="progress-bar flex-1">
+                      <div class="progress-fill bg-green-primary" style="width: 4.1%"></div>
+                    </div>
+                    <span class="text-xs text-gray-500 w-12">4.1%</span>
+                  </div>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-green-light text-green-primary">Open</span>
+                </td>
+                <td class="py-4 px-6 text-gray-500 text-sm">Jan 25</td>
+                <td class="py-4 px-6">
+                  <svg id="chevron-row1" class="w-5 h-5 text-gray-400 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </td>
+              </tr>
+              
+              <!-- Expandable Row 1 -->
+              <tr id="row1" class="expandable-row bg-gray-50">
+                <td colspan="10" class="py-6 px-6">
+                  <div class="bg-white rounded-xl p-6 border border-gray-200">
+                    <h4 class="font-bold text-gray-900 mb-4">Quota Breakdown</h4>
+                    <div class="overflow-x-auto">
+                      <table class="w-full text-sm">
+                        <thead>
+                          <tr class="border-b border-gray-100">
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Quota ID</th>
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Gender</th>
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Age Range</th>
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Language</th>
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">CPI</th>
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Needed</th>
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Filled</th>
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="border-b border-gray-50">
+                            <td class="py-2 px-3 font-mono text-xs text-gray-500">quota-1</td>
+                            <td class="py-2 px-3"><span class="pill bg-blue-100 text-blue-700 text-xs">Male</span></td>
+                            <td class="py-2 px-3 text-gray-700">18-34</td>
+                            <td class="py-2 px-3 text-gray-700">English only</td>
+                            <td class="py-2 px-3 text-green-primary font-semibold">$3.50</td>
+                            <td class="py-2 px-3 text-gray-700">250</td>
+                            <td class="py-2 px-3 text-gray-700">12</td>
+                            <td class="py-2 px-3"><span class="pill bg-green-light text-green-primary text-xs">Open</span></td>
+                          </tr>
+                          <tr class="border-b border-gray-50">
+                            <td class="py-2 px-3 font-mono text-xs text-gray-500">quota-2</td>
+                            <td class="py-2 px-3"><span class="pill bg-blue-100 text-blue-700 text-xs">Male</span></td>
+                            <td class="py-2 px-3 text-gray-700">18-34</td>
+                            <td class="py-2 px-3 text-gray-700">Bilingual</td>
+                            <td class="py-2 px-3 text-green-primary font-semibold">$4.00</td>
+                            <td class="py-2 px-3 text-gray-700">250</td>
+                            <td class="py-2 px-3 text-gray-700">8</td>
+                            <td class="py-2 px-3"><span class="pill bg-green-light text-green-primary text-xs">Open</span></td>
+                          </tr>
+                          <tr class="border-b border-gray-50">
+                            <td class="py-2 px-3 font-mono text-xs text-gray-500">quota-3</td>
+                            <td class="py-2 px-3"><span class="pill bg-pink-light text-pink-primary text-xs">Female</span></td>
+                            <td class="py-2 px-3 text-gray-700">18-34</td>
+                            <td class="py-2 px-3 text-gray-700">English only</td>
+                            <td class="py-2 px-3 text-green-primary font-semibold">$3.50</td>
+                            <td class="py-2 px-3 text-gray-700">250</td>
+                            <td class="py-2 px-3 text-gray-700">15</td>
+                            <td class="py-2 px-3"><span class="pill bg-green-light text-green-primary text-xs">Open</span></td>
+                          </tr>
+                          <tr class="border-b border-gray-50">
+                            <td class="py-2 px-3 font-mono text-xs text-gray-500">quota-4</td>
+                            <td class="py-2 px-3"><span class="pill bg-pink-light text-pink-primary text-xs">Female</span></td>
+                            <td class="py-2 px-3 text-gray-700">18-34</td>
+                            <td class="py-2 px-3 text-gray-700">Bilingual</td>
+                            <td class="py-2 px-3 text-green-primary font-semibold">$4.00</td>
+                            <td class="py-2 px-3 text-gray-700">250</td>
+                            <td class="py-2 px-3 text-gray-700">10</td>
+                            <td class="py-2 px-3"><span class="pill bg-green-light text-green-primary text-xs">Open</span></td>
+                          </tr>
+                          <tr class="border-b border-gray-50">
+                            <td class="py-2 px-3 font-mono text-xs text-gray-500">quota-5</td>
+                            <td class="py-2 px-3"><span class="pill bg-blue-100 text-blue-700 text-xs">Male</span></td>
+                            <td class="py-2 px-3 text-gray-700">35-44</td>
+                            <td class="py-2 px-3 text-gray-700">English only</td>
+                            <td class="py-2 px-3 text-green-primary font-semibold">$3.50</td>
+                            <td class="py-2 px-3 text-gray-700">250</td>
+                            <td class="py-2 px-3 text-gray-700">18</td>
+                            <td class="py-2 px-3"><span class="pill bg-green-light text-green-primary text-xs">Open</span></td>
+                          </tr>
+                          <tr>
+                            <td colspan="8" class="py-2 px-3 text-center text-gray-500 text-sm">
+                              + 11 more quotas...
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              
+              <!-- Row 2 -->
+              <tr class="table-row border-b border-gray-50 cursor-pointer" onclick="toggleRow('row2')">
+                <td class="py-4 px-6">
+                  <span class="pill bg-purple-100 text-purple-700">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                    Morning Consult
+                  </span>
+                </td>
+                <td class="py-4 px-6 font-mono text-sm text-gray-600">472e9f09...f559</td>
+                <td class="py-4 px-6 text-gray-900 font-medium">General</td>
+                <td class="py-4 px-6 text-gray-700">23.4 min</td>
+                <td class="py-4 px-6">
+                  <span class="text-green-primary font-semibold">$2.96 - $4.00</span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-gray-100 text-gray-700">16 quotas</span>
+                </td>
+                <td class="py-4 px-6 w-40">
+                  <div class="flex items-center gap-3">
+                    <div class="progress-bar flex-1">
+                      <div class="progress-fill bg-green-primary" style="width: 3.8%"></div>
+                    </div>
+                    <span class="text-xs text-gray-500 w-12">3.8%</span>
+                  </div>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-green-light text-green-primary">Open</span>
+                </td>
+                <td class="py-4 px-6 text-gray-500 text-sm">Jan 25</td>
+                <td class="py-4 px-6">
+                  <svg id="chevron-row2" class="w-5 h-5 text-gray-400 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </td>
+              </tr>
+              
+              <!-- Row 3 -->
+              <tr class="table-row border-b border-gray-50 cursor-pointer" onclick="toggleRow('row3')">
+                <td class="py-4 px-6">
+                  <span class="pill bg-purple-100 text-purple-700">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                    Morning Consult
+                  </span>
+                </td>
+                <td class="py-4 px-6 font-mono text-sm text-gray-600">d8e4cb6d...3f28</td>
+                <td class="py-4 px-6 text-gray-900 font-medium">General</td>
+                <td class="py-4 px-6 text-gray-700">26.8 min</td>
+                <td class="py-4 px-6">
+                  <span class="text-green-primary font-semibold">$4.00</span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-gray-100 text-gray-700">16 quotas</span>
+                </td>
+                <td class="py-4 px-6 w-40">
+                  <div class="flex items-center gap-3">
+                    <div class="progress-bar flex-1">
+                      <div class="progress-fill bg-green-primary" style="width: 3.9%"></div>
+                    </div>
+                    <span class="text-xs text-gray-500 w-12">3.9%</span>
+                  </div>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-green-light text-green-primary">Open</span>
+                </td>
+                <td class="py-4 px-6 text-gray-500 text-sm">Jan 25</td>
+                <td class="py-4 px-6">
+                  <svg id="chevron-row3" class="w-5 h-5 text-gray-400 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </td>
+              </tr>
+              
+              <!-- Row 4 -->
+              <tr class="table-row border-b border-gray-50 cursor-pointer" onclick="toggleRow('row4')">
+                <td class="py-4 px-6">
+                  <span class="pill bg-purple-100 text-purple-700">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                    Morning Consult
+                  </span>
+                </td>
+                <td class="py-4 px-6 font-mono text-sm text-gray-600">7a1cebec...ddea</td>
+                <td class="py-4 px-6 text-gray-900 font-medium">General</td>
+                <td class="py-4 px-6 text-gray-700">39.0 min</td>
+                <td class="py-4 px-6">
+                  <span class="text-green-primary font-semibold">$2.02 - $4.00</span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-gray-100 text-gray-700">16 quotas</span>
+                </td>
+                <td class="py-4 px-6 w-40">
+                  <div class="flex items-center gap-3">
+                    <div class="progress-bar flex-1">
+                      <div class="progress-fill bg-green-primary" style="width: 5.0%"></div>
+                    </div>
+                    <span class="text-xs text-gray-500 w-12">5.0%</span>
+                  </div>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-green-light text-green-primary">Open</span>
+                </td>
+                <td class="py-4 px-6 text-gray-500 text-sm">Jan 25</td>
+                <td class="py-4 px-6">
+                  <svg id="chevron-row4" class="w-5 h-5 text-gray-400 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </td>
+              </tr>
+              
+              <!-- Row 5 -->
+              <tr class="table-row border-b border-gray-50 cursor-pointer" onclick="toggleRow('row5')">
+                <td class="py-4 px-6">
+                  <span class="pill bg-purple-100 text-purple-700">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                    Morning Consult
+                  </span>
+                </td>
+                <td class="py-4 px-6 font-mono text-sm text-gray-600">d38b7c3a...211a</td>
+                <td class="py-4 px-6 text-gray-900 font-medium">General</td>
+                <td class="py-4 px-6 text-gray-700">37.6 min</td>
+                <td class="py-4 px-6">
+                  <span class="text-green-primary font-semibold">$1.00 - $4.00</span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-gray-100 text-gray-700">16 quotas</span>
+                </td>
+                <td class="py-4 px-6 w-40">
+                  <div class="flex items-center gap-3">
+                    <div class="progress-bar flex-1">
+                      <div class="progress-fill bg-green-primary" style="width: 5.4%"></div>
+                    </div>
+                    <span class="text-xs text-gray-500 w-12">5.4%</span>
+                  </div>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-green-light text-green-primary">Open</span>
+                </td>
+                <td class="py-4 px-6 text-gray-500 text-sm">Jan 25</td>
+                <td class="py-4 px-6">
+                  <svg id="chevron-row5" class="w-5 h-5 text-gray-400 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </td>
+              </tr>
+              
+              <!-- Row 6 - Closed example -->
+              <tr class="table-row border-b border-gray-50 cursor-pointer opacity-60" onclick="toggleRow('row6')">
+                <td class="py-4 px-6">
+                  <span class="pill bg-purple-100 text-purple-700">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>
+                    Morning Consult
+                  </span>
+                </td>
+                <td class="py-4 px-6 font-mono text-sm text-gray-600">abc12345...6789</td>
+                <td class="py-4 px-6 text-gray-900 font-medium">Finance</td>
+                <td class="py-4 px-6 text-gray-700">18.2 min</td>
+                <td class="py-4 px-6">
+                  <span class="text-gray-500 font-semibold">$3.50</span>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-gray-100 text-gray-700">8 quotas</span>
+                </td>
+                <td class="py-4 px-6 w-40">
+                  <div class="flex items-center gap-3">
+                    <div class="progress-bar flex-1">
+                      <div class="progress-fill bg-gray-400" style="width: 100%"></div>
+                    </div>
+                    <span class="text-xs text-gray-500 w-12">100%</span>
+                  </div>
+                </td>
+                <td class="py-4 px-6">
+                  <span class="pill bg-gray-200 text-gray-600">Closed</span>
+                </td>
+                <td class="py-4 px-6 text-gray-500 text-sm">Dec 28</td>
+                <td class="py-4 px-6">
+                  <svg id="chevron-row6" class="w-5 h-5 text-gray-400 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+          <div class="text-sm text-gray-500">
+            Showing <span class="font-medium text-gray-900">1-6</span> of <span class="font-medium text-gray-900">20</span> surveys
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="px-3 py-1.5 text-sm font-medium text-gray-500 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50" disabled>
+              Previous
+            </button>
+            <button class="px-3 py-1.5 text-sm font-medium text-white bg-pink-primary rounded-lg hover:bg-pink-dark">
+              1
+            </button>
+            <button class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+              2
+            </button>
+            <button class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+              3
+            </button>
+            <button class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+      
+    </main>
+  </div>
+  
+  <script>
+    function toggleRow(rowId) {
+      const row = document.getElementById(rowId);
+      const chevron = document.getElementById('chevron-' + rowId);
+      
+      if (row) {
+        row.classList.toggle('expanded');
+      }
+      if (chevron) {
+        chevron.classList.toggle('rotated');
+      }
+    }
+  </script>
+  
+</body>
+</html>

@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "typescript": "^5.0.0",
+    "@packages/tsconfig": "workspace:*",
     "@types/node": "^20.0.0"
   }
 }

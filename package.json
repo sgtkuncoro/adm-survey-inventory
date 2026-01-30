@@ -8,11 +8,18 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:generate": "turbo run db:generate",
     "db:migrate": "turbo run db:migrate",
-    "db:studio": "turbo run db:studio"
+    "db:studio": "turbo run db:studio",
+    "storybook": "turbo run storybook",
+    "build-storybook": "turbo run build-storybook"
   },
   "devDependencies": {
-    "turbo": "latest",
-    "prettier": "^3.0.0"
+    "@types/node": "^20.0.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "prettier": "^3.0.0",
+    "tailwindcss": "^3.4.0",
+    "tailwindcss-animate": "^1.0.7",
+    "turbo": "latest"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {

@@ -12,6 +12,7 @@
     "@cloudflare/workers-types": "^4.20240101.0",
     "wrangler": "^3.0.0",
     "typescript": "^5.0.0",
+    "@packages/tsconfig": "workspace:*",
     "@types/node": "^20.0.0"
   }
 }

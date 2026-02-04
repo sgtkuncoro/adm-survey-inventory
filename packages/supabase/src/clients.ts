@@ -1,5 +1,10 @@
-import { createClient } from '@supabase/supabase-js';
-import { createBrowserClient as _createBrowserClient, createServerClient as _createServerClient, type CookieMethods } from '@supabase/ssr';
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+
+export type { SupabaseClient };
+import {
+  createBrowserClient as _createBrowserClient,
+  createServerClient as _createServerClient,
+} from "@supabase/ssr";
 
 // Generic Bindings interface - extensible by apps
 export type SupabaseEnv = {
@@ -9,15 +14,21 @@ export type SupabaseEnv = {
 };
 
 // Placeholder for generated Database types
+// Placeholder for generated Database types
 // Run `npx supabase gen types typescript` to populate this
-export type Database = any; 
+export type Database = any;
+
+export type TypedSupabaseClient = SupabaseClient<Database, "public">;
 
 /**
  * Creates a Supabase client for use in Cloudflare Workers / Hono.
  * Requires passing the environment variables (Bindings) from the request context.
  */
-export const createWorkerClient = (env: SupabaseEnv, headers?: Record<string, string>) => {
-  return createClient<Database>(
+export const createWorkerClient = (
+  env: SupabaseEnv,
+  headers?: Record<string, string>,
+) => {
+  return createClient<Database, "public">(
     env.SUPABASE_URL,
     env.SUPABASE_ANON_KEY,
     {
@@ -26,8 +37,11 @@ export const createWorkerClient = (env: SupabaseEnv, headers?: Record<string, st
       },
       auth: {
         persistSession: false, // Workers are stateless
-      }
-    }
+      },
+      db: {
+        schema: "public",
+      },
+    },
   );
 };
 
@@ -37,17 +51,22 @@ export const createWorkerClient = (env: SupabaseEnv, headers?: Record<string, st
  */
 export const createAdminClient = (env: SupabaseEnv) => {
   if (!env.SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error("SUPABASE_SERVICE_ROLE_KEY is missing in environment bindings");
+    throw new Error(
+      "SUPABASE_SERVICE_ROLE_KEY is missing in environment bindings",
+    );
   }
-  return createClient<Database>(
+  return createClient<Database, "public">(
     env.SUPABASE_URL,
     env.SUPABASE_SERVICE_ROLE_KEY,
     {
       auth: {
         autoRefreshToken: false,
         persistSession: false,
-      }
-    }
+      },
+      db: {
+        schema: "public",
+      },
+    },
   );
 };
 
@@ -56,10 +75,11 @@ export const createAdminClient = (env: SupabaseEnv) => {
  * Singleton-ish behavior handled by the library.
  */
 export const createBrowserClient = (env: SupabaseEnv) => {
-  return _createBrowserClient<Database>(
-    env.SUPABASE_URL, 
-    env.SUPABASE_ANON_KEY
-  );
+  return _createBrowserClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {
+    db: {
+      schema: "public",
+    },
+  });
 };
 
 /**
@@ -67,18 +87,23 @@ export const createBrowserClient = (env: SupabaseEnv) => {
  * Requires a generic cookie adapter to be passed from the framework (e.g. Next.js cookies()).
  */
 export const createServerClient = (
-  env: SupabaseEnv, 
+  env: SupabaseEnv,
   cookieAdapter: {
     getAll: () => any;
     setAll: (cookies: any[]) => void;
-  }
+  },
 ) => {
-  return _createServerClient<Database>(
-    env.SUPABASE_URL,
-    env.SUPABASE_ANON_KEY,
-    {
-      cookies: cookieAdapter,
-    }
-  );
+  // console.log("Creating Server Client", { supabaseUrl: env.SUPABASE_URL, hasKey: !!env.SUPABASE_ANON_KEY, fn: typeof _createServerClient });
+  if (typeof _createServerClient !== "function") {
+    console.error(
+      "CRITICAL: @supabase/ssr createServerClient is not a function!",
+      _createServerClient,
+    );
+  }
+  return _createServerClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {
+    cookies: cookieAdapter,
+    db: {
+      schema: "public",
+    },
+  });
 };
-

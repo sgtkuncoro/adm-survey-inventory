@@ -3,13 +3,9 @@ compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
-# ENVIRONMENT = "production"
+# Supabase Configuration
+SUPABASE_URL = "https://qoyqmotcxxbswsaucovt.supabase.co"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFveXFtb3RjeHhic3dzYXVjb3Z0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMjg4OTAsImV4cCI6MjA4NTYwNDg5MH0.eI8HdHaiH2glmUOIKrCtJBzAQV21SqcbZcyZV6xcz1U"
+SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFveXFtb3RjeHhic3dzYXVjb3Z0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDAyODg5MCwiZXhwIjoyMDg1NjA0ODkwfQ.42sF1HPgxPvzz_pnb0xRdz3wuszkAMsaz11XWWOUZMk"
 
-# [[kv_namespaces]]
-# binding = "MY_KV_NAMESPACE"
-# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "my-database"
-# database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"

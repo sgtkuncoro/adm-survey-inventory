@@ -1,0 +1,32 @@
+{
+  "name": "@packages/config-tailwind",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "import": "./theme.css",
+      "style": "./theme.css",
+      "default": "./theme.css"
+    },
+    "./theme.css": {
+      "import": "./theme.css",
+      "style": "./theme.css",
+      "default": "./theme.css"
+    },
+    "./tailwind.config": {
+      "import": "./tailwind.config.ts",
+      "types": "./tailwind.config.ts",
+      "default": "./tailwind.config.ts"
+    }
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.18",
+    "postcss": "8.4.35",
+    "tailwindcss": "4.1.18"
+  },
+  "dependencies": {
+    "tailwindcss-animate": "^1.0.7",
+    "tw-animate-css": "^1.4.0"
+  }
+}

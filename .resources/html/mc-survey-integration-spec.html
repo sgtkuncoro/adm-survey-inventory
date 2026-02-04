@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morning Consult Survey Integration | ShopperArmy Technical Spec</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #e11d48;
+      --primary-light: #fce7f3;
+      --primary-dark: #be123c;
+      --secondary: #1a1a2e;
+      --accent: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.6;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--secondary) 0%, #16213e 100%);
+      color: white;
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.1);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 0%, #f0abfc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: rgba(255,255,255,0.7);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* Navigation */
+    .nav {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 16px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+    }
+
+    .nav a {
+      color: var(--gray-600);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 0;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .nav a:hover {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 40px;
+    }
+
+    /* Section */
+    section {
+      margin-bottom: 80px;
+    }
+
+    .section-header {
+      margin-bottom: 40px;
+    }
+
+    .section-number {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--gray-800);
+      margin-bottom: 16px;
+      margin-top: 32px;
+    }
+
+    .section-desc {
+      font-size: 18px;
+      color: var(--gray-500);
+      max-width: 700px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid var(--gray-200);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 24px;
+    }
+
+    .stat-card .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 24px;
+    }
+
+    .stat-card .value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .stat-card .label {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--secondary);
+      color: white;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    th:first-child {
+      border-radius: 8px 0 0 0;
+    }
+
+    th:last-child {
+      border-radius: 0 8px 0 0;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: var(--gray-50);
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--gray-100);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--primary-dark);
+    }
+
+    .code-block {
+      background: var(--gray-900);
+      color: #e5e7eb;
+      padding: 20px;
+      border-radius: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    .code-block .comment {
+      color: var(--gray-500);
+    }
+
+    .code-block .string {
+      color: #34d399;
+    }
+
+    .code-block .keyword {
+      color: #f472b6;
+    }
+
+    /* Flow Diagram */
+    .flow-diagram {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .flow-step {
+      display: flex;
+      gap: 24px;
+      position: relative;
+    }
+
+    .flow-step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 24px;
+      top: 56px;
+      bottom: -8px;
+      width: 2px;
+      background: var(--gray-200);
+    }
+
+    .flow-step-number {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .flow-step-content {
+      flex: 1;
+      padding-bottom: 40px;
+    }
+
+    .flow-step-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .flow-step-desc {
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+
+    .flow-step-details {
+      background: var(--gray-50);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 14px;
+    }
+
+    .flow-step-details ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .flow-step-details li::before {
+      content: '→';
+      color: var(--primary);
+      margin-right: 8px;
+    }
+
+    /* Mockups */
+    .mockup-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 32px;
+      margin-top: 24px;
+    }
+
+    .mockup {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border: 1px solid var(--gray-200);
+    }
+
+    .mockup-header {
+      background: var(--gray-100);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .mockup-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mockup-dots span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gray-300);
+    }
+
+    .mockup-dots span:first-child { background: #ef4444; }
+    .mockup-dots span:nth-child(2) { background: #f59e0b; }
+    .mockup-dots span:nth-child(3) { background: #22c55e; }
+
+    .mockup-title {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+
+    .mockup-body {
+      padding: 24px;
+    }
+
+    /* Survey Card Mockup */
+    .survey-card-mockup {
+      background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid #fbcfe8;
+    }
+
+    .survey-card-mockup.disabled {
+      background: var(--gray-100);
+      border-color: var(--gray-200);
+      opacity: 0.7;
+    }
+
+    .survey-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .survey-card-icon {
+      width: 44px;
+      height: 44px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .survey-card-badge {
+      font-size: 10px;
+      background: var(--primary);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .survey-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+    }
+
+    .survey-card-subtitle {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+
+    .survey-card-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .survey-card-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .survey-card-btn.disabled {
+      background: var(--gray-300);
+      cursor: not-allowed;
+    }
+
+    /* Modal Mockup */
+    .modal-mockup {
+      background: rgba(0,0,0,0.5);
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .modal-emoji {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 24px;
+    }
+
+    .modal-payout {
+      background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .modal-payout-label {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 8px;
+    }
+
+    .modal-payout-value {
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .modal-time {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 24px;
+    }
+
+    .modal-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Admin Tabs Mockup */
+    .admin-mockup {
+      background: var(--gray-900);
+      min-height: 500px;
+    }
+
+    .admin-sidebar {
+      width: 220px;
+      background: var(--secondary);
+      padding: 20px;
+      float: left;
+      min-height: 500px;
+    }
+
+    .admin-sidebar-item {
+      padding: 12px 16px;
+      color: rgba(255,255,255,0.6);
+      font-size: 14px;
+      border-radius: 8px;
+      margin-bottom: 4px;
+    }
+
+    .admin-sidebar-item.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    .admin-main {
+      margin-left: 220px;
+      background: var(--gray-50);
+      min-height: 500px;
+      padding: 24px;
+    }
+
+    .admin-tabs {
+      display: flex;
+      gap: 0;
+      background: white;
+      border-radius: 8px 8px 0 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .admin-tab {
+      padding: 16px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-500);
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .admin-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .admin-form {
+      background: white;
+      padding: 24px;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+
+    .form-input {
+      padding: 10px 14px;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .form-input.mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: var(--gray-50);
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--gray-700);
+      border: 1px solid var(--gray-300);
+    }
+
+    .btn-generate {
+      background: var(--secondary);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Redirect Pages */
+    .redirect-mockups {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .redirect-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      border: 1px solid var(--gray-200);
+    }
+
+    .redirect-card.success {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      border-color: #a7f3d0;
+    }
+
+    .redirect-card.error {
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      border-color: #fecaca;
+    }
+
+    .redirect-card.warning {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border-color: #fde68a;
+    }
+
+    .redirect-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .redirect-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .redirect-desc {
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+
+    /* Status badges */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-new {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .badge-existing {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+
+    /* Lists */
+    ul.feature-list {
+      list-style: none;
+    }
+
+    ul.feature-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    ul.feature-list li::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    /* Architecture Diagram */
+    .arch-diagram {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .arch-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .arch-box {
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      min-width: 150px;
+    }
+
+    .arch-box.user {
+      background: #dbeafe;
+      color: #1d4ed8;
+      border: 2px solid #93c5fd;
+    }
+
+    .arch-box.sa {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 2px solid #f9a8d4;
+    }
+
+    .arch-box.mc {
+      background: #fef3c7;
+      color: #92400e;
+      border: 2px solid #fcd34d;
+    }
+
+    .arch-box.db {
+      background: #d1fae5;
+      color: #065f46;
+      border: 2px solid #6ee7b7;
+    }
+
+    .arch-arrow {
+      font-size: 24px;
+      color: var(--gray-400);
+    }
+
+    .arch-label {
+      font-size: 12px;
+      color: var(--gray-500);
+      text-align: center;
+      margin-top: -10px;
+      margin-bottom: 20px;
+    }
+
+    /* Timeline */
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 32px;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 60px;
+      right: 60px;
+      height: 4px;
+      background: var(--gray-200);
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-dot {
+      width: 50px;
+      height: 50px;
+      background: white;
+      border: 4px solid var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .timeline-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-desc {
+      font-size: 12px;
+      color: var(--gray-500);
+      max-width: 120px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--secondary);
+      color: rgba(255,255,255,0.6);
+      padding: 40px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    footer strong {
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 32px; }
+      .container { padding: 40px 20px; }
+      .mockup-container { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .admin-sidebar { display: none; }
+      .admin-main { margin-left: 0; }
+      .timeline { flex-direction: column; gap: 24px; }
+      .timeline::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Technical Specification
+    </div>
+    <h1>Morning Consult Survey Integration</h1>
+    <p>Connecting ShopperArmy users to high-value survey opportunities through MC's Sample API</p>
+    <div class="hero-meta">
+      <span>Version 1.0</span>
+      <span>•</span>
+      <span>January 30, 2026</span>
+      <span>•</span>
+      <span>ShopperArmy 2.0</span>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#overview">Overview</a>
+      <a href="#business-rules">Business Rules</a>
+      <a href="#user-flow">User Flow</a>
+      <a href="#frontend">Frontend Mockups</a>
+      <a href="#admin">Admin Dashboard</a>
+      <a href="#database">Database</a>
+      <a href="#implementation">Implementation</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Overview Section -->
+    <section id="overview">
+      <div class="section-header">
+        <div class="section-number">01</div>
+        <h2>Overview</h2>
+        <p class="section-desc">ShopperArmy acts as a <strong>supplier</strong> in Morning Consult's Sample API ecosystem, sending our users (panelists) to complete surveys in exchange for payouts.</p>
+      </div>
+
+      <div class="arch-diagram">
+        <div class="arch-row">
+          <div class="arch-box user">👤 User</div>
+          <span class="arch-arrow">→</span>
+          <div class="arch-box sa">🛒 ShopperArmy</div>
+          <span class="arch-arrow">↔</span>
+          <div class="arch-box mc">📊 Morning Consult</div>
+        </div>
+        <div class="arch-label">User sees survey card → Clicks "Start Survey" → Completes on MC → Redirects back with payout</div>
+        
+        <div class="arch-row" style="margin-top: 30px;">
+          <div class="arch-box db">🗄️ Supabase</div>
+        </div>
+        <div class="arch-label">Stores eligibility cache, survey sessions, provider config</div>
+      </div>
+
+      <h3>Key Terminology</h3>
+      <div class="card" style="margin-top: 16px;">
+        <table>
+          <thead>
+            <tr>
+              <th>MC Term</th>
+              <th>ShopperArmy Equivalent</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Bid</code></td>
+              <td>Survey Opportunity</td>
+              <td>A survey available for completion</td>
+            </tr>
+            <tr>
+              <td><code>Panelist</code></td>
+              <td>ShopperArmy User</td>
+              <td>Person taking the survey</td>
+            </tr>
+            <tr>
+              <td><code>CPI</code></td>
+              <td>Cost Per Interview</td>
+              <td>What MC pays us (in <strong>cents</strong> USD)</td>
+            </tr>
+            <tr>
+              <td><code>LOI</code></td>
+              <td>Length of Interview</td>
+              <td>Survey duration (in <strong>seconds</strong>)</td>
+            </tr>
+            <tr>
+              <td><code>Quota</code></td>
+              <td>Targeting Group</td>
+              <td>Demographic segment within a bid</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Business Rules Section -->
+    <section id="business-rules">
+      <div class="section-header">
+        <div class="section-number">02</div>
+        <h2>Business Rules</h2>
+        <p class="section-desc">Core configuration that determines which surveys are shown and how payouts are calculated.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card stat-card">
+          <div class="icon" style="background: #fef3c7;">💰</div>
+          <div class="value">$2.00</div>
+          <div class="label">Minimum CPI Threshold</div>
+        </div>
+        <div class="card stat-card">
+          <div class="icon" style="background: #dbeafe;">📊</div>
+          <div class="value">50%</div>
+          <div class="label">User Payout Percentage</div>
+        </div>
+        <div class="card stat-card">
+          <div class="icon" style="background: #d1fae5;">⏱️</div>
+          <div class="value">60s</div>
+          <div class="label">Eligibility Cache TTL</div>
+        </div>
+        <div class="card stat-card">
+          <div class="icon" style="background: #fce7f3;">🎯</div>
+          <div class="value">$1.00</div>
+          <div class="label">Minimum User Payout</div>
+        </div>
+      </div>
+
+      <h3>Payout Calculation</h3>
+      <div class="card" style="margin-top: 16px;">
+        <table>
+          <thead>
+            <tr>
+              <th>MC CPI</th>
+              <th>Show to User?</th>
+              <th>User Earns</th>
+              <th>ShopperArmy Keeps</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$1.50</td>
+              <td style="color: var(--danger);">❌ No (below threshold)</td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>$2.00</td>
+              <td style="color: var(--accent);">✓ Yes</td>
+              <td><strong>$1.00</strong></td>
+              <td>$1.00</td>
+            </tr>
+            <tr>
+              <td>$3.00</td>
+              <td style="color: var(--accent);">✓ Yes</td>
+              <td><strong>$1.50</strong></td>
+              <td>$1.50</td>
+            </tr>
+            <tr>
+              <td>$4.00</td>
+              <td style="color: var(--accent);">✓ Yes</td>
+              <td><strong>$2.00</strong></td>
+              <td>$2.00</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 16px; padding: 16px; background: var(--gray-50); border-radius: 8px;">
+          <strong>Formula:</strong> <code>user_payout = (CPI × 50%) / 100</code> → Convert cents to dollars
+        </div>
+      </div>
+    </section>
+
+    <!-- User Flow Section -->
+    <section id="user-flow">
+      <div class="section-header">
+        <div class="section-number">03</div>
+        <h2>User Flow</h2>
+        <p class="section-desc">The complete journey from login to payout, including all API touchpoints.</p>
+      </div>
+
+      <div class="flow-diagram">
+        <div class="flow-steps">
+          
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">User Login → Eligibility Pre-fetch</div>
+              <div class="flow-step-desc">When a user logs in, we fetch their personalized survey availability from MC.</div>
+              <div class="flow-step-details">
+                <ul>
+                  <li>Get user's profile data (DOB → age, gender)</li>
+                  <li>Fetch active bids from our survey_inventory table</li>
+                  <li>Call <code>POST /supplier/eligibility</code> with qualifications + bid IDs</li>
+                  <li>Filter to bids with CPI ≥ $2.00</li>
+                  <li>Store in <code>user_survey_eligibility</code> with timestamp</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">Feed Display → Survey Card</div>
+              <div class="flow-step-desc">The mission feed shows a survey card based on cached eligibility.</div>
+              <div class="flow-step-details">
+                <ul>
+                  <li><strong>If eligible surveys exist:</strong> Show active card with "Earn $1 or more"</li>
+                  <li><strong>If no eligible surveys:</strong> Show disabled "Check back later" state</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">Card Tap → Re-fetch & Modal</div>
+              <div class="flow-step-desc">When user taps the card, check freshness and show the payout modal.</div>
+              <div class="flow-step-details">
+                <ul>
+                  <li>Check <code>fetched_at</code> timestamp</li>
+                  <li>If older than 60 seconds, re-fetch from MC</li>
+                  <li>Calculate user payout: <code>(CPI × 50% / 100)</code></li>
+                  <li>Calculate time: <code>LOI / 60</code> → minutes</li>
+                  <li>Display modal: "Your Payout: $X.XX" + "~Y min"</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">Start Survey → Entry URL</div>
+              <div class="flow-step-desc">Build and sign the MC entry URL, open in new tab.</div>
+              <div class="flow-step-details">
+                <ul>
+                  <li>Create <code>survey_sessions</code> record with status='pending'</li>
+                  <li>Build entry URL with required params</li>
+                  <li>Sign URL with Ed25519 private key</li>
+                  <li>Open in new browser tab</li>
+                </ul>
+              </div>
+              <div class="code-block" style="margin-top: 16px;">
+<span class="comment">// Entry URL Format</span>
+https://surveys.insights-today.com/v1/survey/entry
+  ?bid_id=<span class="string">{bid_id}</span>
+  &panelist_id=<span class="string">{user_id}</span>
+  &supplier_id=<span class="string">{supplier_id}</span>
+  &session_metadata=<span class="string">{our_session_id}</span>
+  &qualifications=age,<span class="string">{age}</span>,gender,<span class="string">{gender_code}</span>
+  &signature=<span class="string">{ed25519_signature}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-step-number">5</div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">Survey Completion → Redirect</div>
+              <div class="flow-step-desc">MC redirects back to our page with status and payout info.</div>
+              <div class="flow-step-details">
+                <ul>
+                  <li>Verify MC's signature on redirect URL</li>
+                  <li>Look up session by <code>session_metadata</code></li>
+                  <li>Update status, actual_payout, completed_at</li>
+                  <li><strong>If complete:</strong> Credit user wallet</li>
+                  <li>Display appropriate result screen</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Frontend Mockups Section -->
+    <section id="frontend">
+      <div class="section-header">
+        <div class="section-number">04</div>
+        <h2>Frontend Mockups</h2>
+        <p class="section-desc">Visual designs for the survey card, payout modal, and result pages.</p>
+      </div>
+
+      <h3>Survey Mission Card</h3>
+      <div class="mockup-container">
+        <div>
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--accent);">✓ Active State</div>
+          <div class="survey-card-mockup">
+            <div class="survey-card-header">
+              <div class="survey-card-icon">✨</div>
+              <span class="survey-card-badge">Morning Consult</span>
+            </div>
+            <div class="survey-card-title">Quick Survey</div>
+            <div class="survey-card-subtitle">Earn $1 or more • See your personalized offer</div>
+            <button class="survey-card-btn">See My Offer →</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--gray-400);">○ Disabled State</div>
+          <div class="survey-card-mockup disabled">
+            <div class="survey-card-header">
+              <div class="survey-card-icon">📋</div>
+            </div>
+            <div class="survey-card-title" style="color: var(--gray-500);">Surveys</div>
+            <div class="survey-card-subtitle">Check back later for new surveys</div>
+            <button class="survey-card-btn disabled">No Surveys Available</button>
+          </div>
+        </div>
+      </div>
+
+      <h3>Survey Offer Modal</h3>
+      <div class="mockup-container">
+        <div class="mockup">
+          <div class="mockup-header">
+            <div class="mockup-dots"><span></span><span></span><span></span></div>
+            <div class="mockup-title">shopperarmy.com</div>
+          </div>
+          <div class="modal-mockup">
+            <div class="modal-content">
+              <div class="modal-emoji">✨</div>
+              <div class="modal-title">Quick Survey</div>
+              <div class="modal-payout">
+                <div class="modal-payout-label">Your Payout</div>
+                <div class="modal-payout-value">$1.50</div>
+              </div>
+              <div class="modal-time">⏱️ Estimated Time: ~7 min</div>
+              <button class="modal-btn">Start Survey</button>
+            </div>
+          </div>
+        </div>
+        <div class="mockup">
+          <div class="mockup-header">
+            <div class="mockup-dots"><span></span><span></span><span></span></div>
+            <div class="mockup-title">shopperarmy.com</div>
+          </div>
+          <div class="modal-mockup">
+            <div class="modal-content">
+              <div class="modal-emoji">😕</div>
+              <div class="modal-title">No Surveys Available</div>
+              <div style="color: var(--gray-500); margin-bottom: 24px; font-size: 14px;">Sorry, this survey just filled up. Check back soon for new opportunities!</div>
+              <button class="modal-btn" style="background: var(--gray-200); color: var(--gray-700);">Back to Missions</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Redirect Result Pages</h3>
+      <div class="redirect-mockups">
+        <div class="redirect-card success">
+          <div class="redirect-emoji">🎉</div>
+          <div class="redirect-title">You earned $1.50!</div>
+          <div class="redirect-desc">Credits added to your wallet</div>
+        </div>
+        <div class="redirect-card">
+          <div class="redirect-emoji">👋</div>
+          <div class="redirect-title">Thanks for trying!</div>
+          <div class="redirect-desc">Survey wasn't a match</div>
+        </div>
+        <div class="redirect-card warning">
+          <div class="redirect-emoji">📊</div>
+          <div class="redirect-title">Survey Full</div>
+          <div class="redirect-desc">This one just filled up</div>
+        </div>
+        <div class="redirect-card error">
+          <div class="redirect-emoji">⏱️</div>
+          <div class="redirect-title">Session Expired</div>
+          <div class="redirect-desc">Please try again</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Admin Dashboard Section -->
+    <section id="admin">
+      <div class="section-header">
+        <div class="section-number">05</div>
+        <h2>Admin Dashboard</h2>
+        <p class="section-desc">Expanded provider configuration with tabs for security, redirects, and business rules.</p>
+      </div>
+
+      <div class="mockup" style="margin-top: 24px;">
+        <div class="mockup-header">
+          <div class="mockup-dots"><span></span><span></span><span></span></div>
+          <div class="mockup-title">ShopperArmy Admin — Survey Providers</div>
+        </div>
+        <div class="admin-mockup">
+          <div class="admin-sidebar">
+            <div class="admin-sidebar-item">Dashboard</div>
+            <div class="admin-sidebar-item">Missions</div>
+            <div class="admin-sidebar-item active">Survey Inventory</div>
+            <div class="admin-sidebar-item" style="padding-left: 32px; font-size: 13px;">All Surveys</div>
+            <div class="admin-sidebar-item" style="padding-left: 32px; font-size: 13px; background: rgba(255,255,255,0.05);">Survey Provider</div>
+            <div class="admin-sidebar-item" style="padding-left: 32px; font-size: 13px;">Sync Jobs</div>
+            <div class="admin-sidebar-item">Members</div>
+          </div>
+          <div class="admin-main">
+            <h3 style="margin-top: 0; margin-bottom: 16px;">Edit Provider: Morning Consult</h3>
+            <div class="admin-tabs">
+              <div class="admin-tab active">General</div>
+              <div class="admin-tab">Security</div>
+              <div class="admin-tab">Redirects</div>
+              <div class="admin-tab">Business Rules</div>
+            </div>
+            <div class="admin-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Provider Name</label>
+                  <input type="text" class="form-input" value="Morning Consult">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Slug (ID)</label>
+                  <input type="text" class="form-input" value="morning-consult">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">API Key</label>
+                  <input type="password" class="form-input" value="••••••••••••••••">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Base URL (API)</label>
+                  <input type="text" class="form-input mono" value="https://sample-api.morningconsult.com/v1">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Supplier ID <span class="badge badge-new">NEW</span></label>
+                  <input type="text" class="form-input mono" value="a1b2c3d4-e5f6-7890-abcd-ef1234567890">
+                  <span class="form-hint">From MC's /user/info endpoint</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Prescreener URL <span class="badge badge-new">NEW</span></label>
+                  <input type="text" class="form-input mono" value="https://surveys.insights-today.com/v1">
+                  <span class="form-hint">Different from API URL!</span>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" checked> Active (Enable ingestion)
+                  </label>
+                </div>
+              </div>
+              <div class="btn-group">
+                <button class="btn btn-secondary">Cancel</button>
+                <button class="btn btn-primary">Save Changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Tab 2: Security (URL Signing)</h3>
+      <div class="card" style="margin-top: 16px;">
+        <p style="margin-bottom: 16px; color: var(--gray-600);">Morning Consult requires Ed25519 URL signatures to prevent tampering. Generate a key pair and register the public key with MC.</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Private Key</label>
+            <input type="password" class="form-input mono" value="••••••••••••••••••••••••••••••••" disabled>
+            <span class="form-hint">Stored encrypted, never displayed</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Public Key <button style="float: right; font-size: 11px; background: var(--gray-100); border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">📋 Copy</button></label>
+            <input type="text" class="form-input mono" value="MCowBQYDK2VwAyEA7h8dX2kF9..." readonly>
+            <span class="form-hint">Register this with MC via POST /user/public-keys</span>
+          </div>
+        </div>
+        <div style="margin-top: 16px;">
+          <button class="btn btn-generate">🔐 Generate New Key Pair</button>
+          <span style="margin-left: 12px; font-size: 13px; color: var(--warning);">⚠️ After generating, you must re-register with MC</span>
+        </div>
+      </div>
+
+      <h3>Tab 3: Redirect URLs</h3>
+      <div class="card" style="margin-top: 16px;">
+        <p style="margin-bottom: 16px; color: var(--gray-600);">Configure where MC sends users after survey completion. These also need to be registered with MC's API.</p>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 140px;">Status</th>
+              <th>Redirect URL Template</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Complete</strong></td>
+              <td><code style="font-size: 11px;">https://shopperarmy.com/redirect?status=complete&session={{session_metadata}}&payout={{interview_cost}}</code></td>
+            </tr>
+            <tr>
+              <td><strong>Screenout</strong></td>
+              <td><code style="font-size: 11px;">https://shopperarmy.com/redirect?status=screenout&session={{session_metadata}}</code></td>
+            </tr>
+            <tr>
+              <td><strong>Over Quota</strong></td>
+              <td><code style="font-size: 11px;">https://shopperarmy.com/redirect?status=over_quota&session={{session_metadata}}</code></td>
+            </tr>
+            <tr>
+              <td><strong>Quality Term</strong></td>
+              <td><code style="font-size: 11px;">https://shopperarmy.com/redirect?status=quality_term&session={{session_metadata}}</code></td>
+            </tr>
+            <tr>
+              <td><strong>Timeout</strong></td>
+              <td><code style="font-size: 11px;">https://shopperarmy.com/redirect?status=timeout&session={{session_metadata}}</code></td>
+            </tr>
+            <tr>
+              <td><strong>Default</strong></td>
+              <td><code style="font-size: 11px;">https://shopperarmy.com/redirect?status=unknown&session={{session_metadata}}</code></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 16px; padding: 12px; background: var(--gray-50); border-radius: 8px; font-size: 13px;">
+          <strong>Available Variables:</strong> <code>{{session_id}}</code>, <code>{{panelist_id}}</code>, <code>{{status_id}}</code>, <code>{{status_detail_id}}</code>, <code>{{interview_cost}}</code>, <code>{{quota_id}}</code>, <code>{{session_metadata}}</code>, <code>{{bid_id}}</code>
+        </div>
+      </div>
+
+      <h3>Tab 4: Business Rules</h3>
+      <div class="card" style="margin-top: 16px;">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Minimum CPI (cents)</label>
+            <input type="number" class="form-input" value="200">
+            <span class="form-hint">Only show surveys with CPI ≥ $2.00</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">User Payout Percentage</label>
+            <input type="number" class="form-input" value="50">
+            <span class="form-hint">User earns this % of CPI</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Eligibility Cache TTL (seconds)</label>
+            <input type="number" class="form-input" value="60">
+            <span class="form-hint">Re-fetch if older than this</span>
+          </div>
+        </div>
+        <div style="margin-top: 16px; padding: 16px; background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); border-radius: 8px;">
+          <strong>Example:</strong> $4.00 CPI → User earns <strong>$2.00</strong> (50%) → ShopperArmy keeps <strong>$2.00</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- Database Section -->
+    <section id="database">
+      <div class="section-header">
+        <div class="section-number">06</div>
+        <h2>Database Schema</h2>
+        <p class="section-desc">New tables and columns to support survey sessions and eligibility caching.</p>
+      </div>
+
+      <h3>survey_providers Table Updates</h3>
+      <div class="card" style="margin-top: 16px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Column</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>supplier_id</code></td>
+              <td>uuid</td>
+              <td>MC supplier ID from /user/info <span class="badge badge-new">NEW</span></td>
+            </tr>
+            <tr>
+              <td><code>prescreener_url</code></td>
+              <td>text</td>
+              <td>Base URL for entry links <span class="badge badge-new">NEW</span></td>
+            </tr>
+            <tr>
+              <td><code>private_key</code></td>
+              <td>text (encrypted)</td>
+              <td>Ed25519 private key <span class="badge badge-new">NEW</span></td>
+            </tr>
+            <tr>
+              <td><code>public_key</code></td>
+              <td>text</td>
+              <td>Ed25519 public key <span class="badge badge-new">NEW</span></td>
+            </tr>
+            <tr>
+              <td><code>min_cpi_cents</code></td>
+              <td>integer</td>
+              <td>Minimum CPI threshold (default: 200) <span class="badge badge-new">NEW</span></td>
+            </tr>
+            <tr>
+              <td><code>user_payout_pct</code></td>
+              <td>integer</td>
+              <td>User payout % (default: 50) <span class="badge badge-new">NEW</span></td>
+            </tr>
+            <tr>
+              <td><code>eligibility_cache_ttl</code></td>
+              <td>integer</td>
+              <td>Cache TTL in seconds (default: 60) <span class="badge badge-new">NEW</span></td>
+            </tr>
+            <tr>
+              <td><code>redirect_urls</code></td>
+              <td>jsonb</td>
+              <td>Redirect URL templates by status <span class="badge badge-new">NEW</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>New Table: survey_sessions</h3>
+      <div class="card" style="margin-top: 16px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Column</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>id</code></td><td>uuid</td><td>Primary key</td></tr>
+            <tr><td><code>user_id</code></td><td>uuid</td><td>FK to users.id</td></tr>
+            <tr><td><code>provider_id</code></td><td>uuid</td><td>FK to survey_providers.id</td></tr>
+            <tr><td><code>bid_id</code></td><td>text</td><td>MC bid ID</td></tr>
+            <tr><td><code>quota_id</code></td><td>text</td><td>MC quota ID (if known)</td></tr>
+            <tr><td><code>cpi_at_click</code></td><td>integer</td><td>CPI in cents when clicked</td></tr>
+            <tr><td><code>expected_payout</code></td><td>integer</td><td>Expected user payout (cents)</td></tr>
+            <tr><td><code>actual_payout</code></td><td>integer</td><td>Actual payout from redirect</td></tr>
+            <tr><td><code>status</code></td><td>text</td><td>pending, complete, screenout, over_quota, quality_term, timeout</td></tr>
+            <tr><td><code>status_detail</code></td><td>text</td><td>MC status_detail_id</td></tr>
+            <tr><td><code>mc_session_id</code></td><td>text</td><td>MC session ID from redirect</td></tr>
+            <tr><td><code>started_at</code></td><td>timestamptz</td><td>When user clicked Start</td></tr>
+            <tr><td><code>completed_at</code></td><td>timestamptz</td><td>When redirect received</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>New Table: user_survey_eligibility</h3>
+      <div class="card" style="margin-top: 16px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Column</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>id</code></td><td>uuid</td><td>Primary key</td></tr>
+            <tr><td><code>user_id</code></td><td>uuid</td><td>FK to users.id</td></tr>
+            <tr><td><code>provider_id</code></td><td>uuid</td><td>FK to survey_providers.id</td></tr>
+            <tr><td><code>eligible_bids</code></td><td>jsonb</td><td>Array of {bid_id, quota_ids[], cpi, loi}</td></tr>
+            <tr><td><code>best_bid</code></td><td>jsonb</td><td>Pre-computed best bid for quick display</td></tr>
+            <tr><td><code>fetched_at</code></td><td>timestamptz</td><td>When eligibility was fetched</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Implementation Section -->
+    <section id="implementation">
+      <div class="section-header">
+        <div class="section-number">07</div>
+        <h2>Implementation Phases</h2>
+        <p class="section-desc">Phased rollout plan from backend foundation to production launch.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot">1</div>
+          <div class="timeline-title">Backend</div>
+          <div class="timeline-desc">DB migrations, URL signing, MC API service</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">2</div>
+          <div class="timeline-title">Admin UI</div>
+          <div class="timeline-desc">Tabbed config, key generation, redirects</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">3</div>
+          <div class="timeline-title">Frontend</div>
+          <div class="timeline-desc">Survey card, modal, redirect pages</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">4</div>
+          <div class="timeline-title">Testing</div>
+          <div class="timeline-desc">Sandbox testing, E2E validation</div>
+        </div>
+      </div>
+
+      <div class="card-grid" style="margin-top: 48px;">
+        <div class="card">
+          <h3 style="margin-top: 0;">Phase 1: Backend Foundation</h3>
+          <ul class="feature-list">
+            <li>Database migrations (survey_providers, survey_sessions, user_survey_eligibility)</li>
+            <li>Ed25519 key generation utility</li>
+            <li>URL signing service</li>
+            <li>MC API service (eligibility, redirect registration)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin-top: 0;">Phase 2: Admin Dashboard</h3>
+          <ul class="feature-list">
+            <li>Tabbed provider config modal</li>
+            <li>Key pair generation UI with copy button</li>
+            <li>Redirect URL configuration</li>
+            <li>Business rules inputs</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin-top: 0;">Phase 3: Frontend UX</h3>
+          <ul class="feature-list">
+            <li>Survey card component (active/disabled states)</li>
+            <li>Survey offer modal with payout reveal</li>
+            <li>Redirect result pages (5 statuses)</li>
+            <li>Login hook for eligibility pre-fetch</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin-top: 0;">Phase 4: Testing & Launch</h3>
+          <ul class="feature-list">
+            <li>MC Sandbox environment testing</li>
+            <li>URL signature validation</li>
+            <li>End-to-end flow testing</li>
+            <li>Production deployment</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>MC Setup Requirements</h3>
+      <div class="card" style="margin-top: 16px;">
+        <p style="margin-bottom: 16px; color: var(--gray-600);">These actions must be performed in MC's system (via API):</p>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Action</th>
+              <th>Endpoint</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Register our public key</td>
+              <td><code>POST /user/public-keys</code></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Set default redirect URL</td>
+              <td><code>PUT /user/redirect-urls/default</code></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Set status-specific redirects</td>
+              <td><code>PUT /user/redirect-urls/{status_id}</code></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Get MC's public key (for verification)</td>
+              <td><code>GET /lookup/public-key</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <strong>ShopperArmy</strong> × Morning Consult Integration Spec<br>
+    Version 1.0 | January 30, 2026
+  </footer>
+
+</body>
+</html>

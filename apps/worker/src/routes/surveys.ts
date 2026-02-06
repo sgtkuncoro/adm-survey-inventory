@@ -44,6 +44,13 @@ const eligibilityRoute = createRoute({
         "application/json": {
           schema: z.object({
             hasEligibleSurveys: z.boolean(),
+            surveys: z.array(
+              z.object({
+                id: z.string(),
+                cpi: z.number(),
+                loi: z.number().optional(),
+              })
+            ),
             bestBid: z
               .object({
                 externalBidId: z.string(),
@@ -219,8 +226,27 @@ const app = new OpenAPIHono<Env>()
         { onConflict: "user_id,provider_id" },
       );
 
+      // Map to simple survey objects for frontend
+      // We need to fetch LOI from quotas or bid data.
+      // The MC response has quotas with LOI.
+      // We also need to map externalBidId back to our internal DB id if needed, 
+      // OR just use externalBidId for the session creation.
+      // The session creation uses `bidId` which expects `external_bid_id` (based on line 270 `.eq("external_bid_id", bidId)`).
+      
+      const surveys = eligibleBids.map(b => {
+          // Find max cpi and avg/max LOI
+          const maxCpi = Math.max(...b.quotas.map(q => q.cpi), 0);
+          const maxLoi = Math.max(...b.quotas.map(q => q.loi), 0);
+          return {
+              id: b.bidId,
+              cpi: maxCpi,
+              loi: Math.ceil(maxLoi / 60)
+          };
+      });
+
       return c.json({
         hasEligibleSurveys: eligibleBids.length > 0,
+        surveys,
         bestBid,
       });
     } catch (error) {

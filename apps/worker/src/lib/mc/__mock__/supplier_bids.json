@@ -1,0 +1,137 @@
+{
+  "bids": [
+    {
+      "buyer_account_id": "0b6f207c-96e1-4dce-b032-566a815ad263",
+      "buyer_id": "9020f6f3-db41-470a-a5d7-c04fa2da9156",
+      "closed_at": "2022-01-01T00:00:00Z",
+      "country_id": "us",
+      "end_date": "2022-01-01T00:00:00Z",
+      "exclusions": [
+        {
+          "group_id": "0bbae805-5a80-42e3-8d5f-cb056a0f825d",
+          "lockout_period": 7
+        }
+      ],
+      "id": "000f09a3-bc25-4adc-a443-a9975800e7ac",
+      "language_ids": [
+        "en",
+        "es"
+      ],
+      "name": "My Example Survey",
+      "published_at": "2021-12-30T00:00:00Z",
+      "qualifications": [
+        {
+          "id": "flossing",
+          "responses": [
+            {
+              "id": "1",
+              "translations": [
+                {
+                  "language_id": "en",
+                  "text": "Yes"
+                },
+                {
+                  "language_id": "es",
+                  "text": "Sí"
+                }
+              ]
+            },
+            {
+              "id": "2",
+              "translations": [
+                {
+                  "language_id": "en",
+                  "text": "No"
+                },
+                {
+                  "language_id": "es",
+                  "text": "No"
+                }
+              ]
+            }
+          ],
+          "translations": [
+            {
+              "language_id": "en",
+              "text": "Do you floss your teeth regularly?"
+            },
+            {
+              "language_id": "es",
+              "text": "¿Usas hilo dental regularmente?"
+            }
+          ],
+          "type": "multiple_choice"
+        }
+      ],
+      "quotas": [
+        {
+          "cost_per_interview": 100,
+          "id": "6a7d0190-e6ad-4a59-9945-7ba460517f2b",
+          "qualifications": [
+            {
+              "id": "gender",
+              "response_ids": [
+                "1"
+              ],
+              "scope": "global"
+            },
+            {
+              "id": "age",
+              "response_ids": [
+                "18",
+                "19",
+                "20",
+                "21"
+              ],
+              "scope": "global"
+            },
+            {
+              "id": "flossing",
+              "response_ids": [
+                "1"
+              ],
+              "scope": "bid"
+            }
+          ],
+          "statistics": {
+            "length_of_interview": 600,
+            "median_length_of_interview": 600,
+            "num_available": 500,
+            "num_completes": 100,
+            "num_failures": 0,
+            "num_in_progress": 0,
+            "num_over_quotas": 0,
+            "num_qualified": 100,
+            "num_quality_terminations": 0,
+            "num_timeouts": 0,
+            "qualified_conversion": 100
+          }
+        }
+      ],
+      "state": "active",
+      "statistics": {
+        "earnings_per_click": 50,
+        "estimated_length_of_interview": 720,
+        "incidence_rate": 100,
+        "length_of_interview": 600,
+        "median_length_of_interview": 600,
+        "num_available": 500,
+        "num_completes": 100,
+        "num_entrants": 100,
+        "num_failures": 0,
+        "num_in_progress": 0,
+        "num_over_quotas": 0,
+        "num_qualified": 100,
+        "num_quality_terminations": 0,
+        "num_screenouts": 0,
+        "num_timeouts": 0,
+        "qualified_conversion": 100,
+        "system_conversion": 100
+      },
+      "supplier_exclusive": false,
+      "survey_type": "ad_hoc",
+      "timeout": 3600,
+      "topic_id": "general"
+    }
+  ]
+}

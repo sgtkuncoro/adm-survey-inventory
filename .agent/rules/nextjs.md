@@ -1,8 +1,12 @@
+---
+trigger: always_on
+---
+
 # Next.js 15 & Frontend Rules
 
 ## Core Stack
 
-- **Framework**: Next.js 15 (App Router) - _Planned Extension_
+- **Framework**: Next.js 14 (App Router) - _Planned Extension_
 - **Styling**: Tailwind CSS + shadcn/ui
 - **Icons**: Lucide React
 - **State**: Zustand (global client state), TanStack Query (server state/caching)
@@ -30,5 +34,5 @@
 
 ## Deployment
 
-- Deploy to Cloudflare Pages (preferred) or Vercel.
-- Use `@cloudflare/next-on-pages` adapter if deploying to Pages.
+- Deploy to Cloudflare Pages (preferred).
+- Use `@opennextjs/cloudflare` adapter if deploying to Worker.

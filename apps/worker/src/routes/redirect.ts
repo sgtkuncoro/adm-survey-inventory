@@ -10,6 +10,7 @@ type Bindings = {
   SUPABASE_URL: string;
   SUPABASE_ANON_KEY: string;
   SUPABASE_SERVICE_ROLE_KEY: string;
+  FRONTEND_URL: string;
 };
 
 type Variables = {
@@ -210,13 +211,14 @@ const app = new OpenAPIHono<Env>().openapi(redirectRoute, async (c) => {
     }
   }
 
-  // Return appropriate response
-  return c.json({
-    success: true,
-    status: params.status,
-    payout: actualPayout,
-    message: getStatusMessage(params.status),
-  });
+  // Redirect to frontend
+  const frontendUrl = c.env.FRONTEND_URL || "http://localhost:3001";
+  const redirectUrl = new URL(`${frontendUrl}/surveys/redirect/${params.status}`);
+  if (actualPayout) {
+    redirectUrl.searchParams.set("payout", actualPayout.toString());
+  }
+  
+  return c.redirect(redirectUrl.toString());
 });
 
 export default app;

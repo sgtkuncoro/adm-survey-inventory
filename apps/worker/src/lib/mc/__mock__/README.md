@@ -1,0 +1,1 @@
+# Source [supplier_bids_api_docs](https://sample-api.morningconsult.com/docs/#GET-listAdvertisedBids-parameters)

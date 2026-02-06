@@ -97,7 +97,8 @@ export default {
   fetch: app.fetch,
   async scheduled(event: any, env: Bindings, ctx: any) {
     console.log("Starting scheduled survey sync...");
-    const supabase = createWorkerClient(env);
+    const { createAdminClient } = await import("@packages/supabase");
+    const supabase = createAdminClient(env);
     await syncSurveyInventory(supabase);
     console.log("Scheduled survey sync completed.");
   },

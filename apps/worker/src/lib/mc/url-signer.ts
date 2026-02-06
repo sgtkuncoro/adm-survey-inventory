@@ -1,6 +1,40 @@
 import { signMessage } from "../crypto/ed25519";
 import { ed25519 } from "@noble/curves/ed25519.js";
 
+/**
+ * Sign redirect URL parameters (for testing purposes)
+ * This mimics what Morning Consult does when signing redirect callbacks
+ */
+export function signRedirectUrl(
+  params: {
+    status: string;
+    session: string;
+    payout?: string;
+    statusId?: string;
+    statusDetailId?: string;
+  },
+  privateKeyBase64: string,
+): string {
+  // Build the message in alphabetical order (matching verifyRedirectSignature)
+  const messageParts: string[] = [];
+
+  if (params.payout) {
+    messageParts.push(`interview_cost=${params.payout}`);
+  }
+  messageParts.push(`session_metadata=${params.session}`);
+  messageParts.push(`status=${params.status}`);
+  if (params.statusDetailId) {
+    messageParts.push(`status_detail_id=${params.statusDetailId}`);
+  }
+  if (params.statusId) {
+    messageParts.push(`status_id=${params.statusId}`);
+  }
+
+  const message = Buffer.from(messageParts.join("&"));
+  const signatureBytes = signMessage(message, privateKeyBase64);
+  return signatureBytes.toString("base64");
+}
+
 export interface EntryUrlParams {
   bidId: string;
   panelistId: string;

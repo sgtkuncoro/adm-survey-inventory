@@ -1,5 +1,0 @@
-@import "tailwindcss";
-@import "@packages/ui/globals.css";
-@import "@packages/config-tailwind/theme.css";
-
-@plugin "tailwindcss-animate";

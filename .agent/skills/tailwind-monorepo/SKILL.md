@@ -5,7 +5,7 @@ description: Best practices for managing Tailwind CSS v4 in a Turborepo monorepo
 
 # Tailwind CSS v4 in Turborepo (Best Practice)
 
-This guide outlines the standard operating procedure for managing styles across `apps/web` (Next.js) and `packages/ui` using Tailwind CSS v4. It strictly follows the architecture where the UI package compiles its own styles, and the application consumers import that artifact.
+This guide outlines the standard operating procedure for managing styles across `apps/web` (Next.js) and `components/ui` using Tailwind CSS v4. It strictly follows the architecture where the UI package compiles its own styles, and the application consumers import that artifact.
 
 ## 1. Architecture
 
@@ -22,7 +22,7 @@ This guide outlines the standard operating procedure for managing styles across 
   :root { ... variables ... }
   ```
 
-### Shared UI Package (`packages/ui`)
+### Shared UI Package (`components/ui`)
 
 - **Purpose**: Reusable components.
 - **Config**: Imports `@packages/config-tailwind/theme.css`.
@@ -35,7 +35,7 @@ This guide outlines the standard operating procedure for managing styles across 
 
 - **Configuration**:
   - **Imports Config**: `@import "@packages/config-tailwind/theme.css";` (for local app utility classes).
-  - **Imports UI Styles**: `@import "@packages/ui/globals.css";` (for shared component styles).
+  - **Imports UI Styles**: `@import "local shadcn/ui components/globals.css";` (for shared component styles).
 - **NO Scanning**: **DO NOT** use `@source` to scan the UI package source files. This is fragile and relies on internal implementation details.
 
 ## 2. Setup
@@ -61,7 +61,7 @@ You must export the theme file with the `style` condition for Tailwind/PostCSS r
 }
 ```
 
-### UI Package (`packages/ui/package.json`)
+### UI Package (`components/ui/package.json`)
 
 Must have scripts to build styles and export the compiled output.
 
@@ -85,12 +85,13 @@ Must have scripts to build styles and export the compiled output.
 
 ```css
 @import "tailwindcss";
-/* Import pre-built UI styles */
-@import "@packages/ui/globals.css";
-/* Import shared config tokens */
 @import "@packages/config-tailwind/theme.css";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 @plugin "tailwindcss-animate";
+
 ```
 
 ## 4. Development Workflow
@@ -98,9 +99,9 @@ Must have scripts to build styles and export the compiled output.
 ### Adding a New Color
 
 1.  Add variable to `packages/config-tailwind/theme.css`.
-2.  Run `pnpm build:styles` in `packages/ui` if used there.
+2.  Run `pnpm build:styles` in `components/ui` if used there.
 
 ### Changing UI Components
 
-1.  Modify component in `packages/ui`.
-2.  If classes are added, ensure `packages/ui` watcher is running (`pnpm dev:styles`) or rebuild styles.
+1.  Modify component in `components/ui`.
+2.  If classes are added, ensure `components/ui` watcher is running (`pnpm dev:styles`) or rebuild styles.

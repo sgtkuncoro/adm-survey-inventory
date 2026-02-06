@@ -1,0 +1,69 @@
+name: Deploy Web Apps
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web-admin/**"
+      - "apps/web-user/**"
+      - "packages/**"
+  workflow_dispatch:
+
+jobs:
+  deploy-admin:
+    runs-on: ubuntu-latest
+    name: Deploy Admin
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install -g pnpm && pnpm install
+
+      - name: Build Admin (Next-on-Pages)
+        run: |
+          cd apps/web-admin
+          npx @cloudflare/next-on-pages@1
+
+      - name: Deploy Admin to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: survey-inventory-admin 
+          directory: apps/web-admin/.vercel/output/static
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-user:
+    runs-on: ubuntu-latest
+    name: Deploy User
+    needs: deploy-admin # Optional: Run sequentially to save resources or parallel by removing this
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install -g pnpm && pnpm install
+
+      - name: Build User (Next-on-Pages)
+        run: |
+          cd apps/web-user
+          npx @cloudflare/next-on-pages@1
+
+      - name: Deploy User to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: survey-inventory-user
+          directory: apps/web-user/.vercel/output/static
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

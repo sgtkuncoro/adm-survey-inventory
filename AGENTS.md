@@ -53,11 +53,11 @@ This is a **Survey Inventory System** for ShopperArmy, designed to integrate wit
 apps/
   docs/           # Storybook documentation & Design System
   worker/         # Hono API on Cloudflare Workers (The Core)
-  web/            # Next.js Application (Planned)
+  web-admin/      # Next.js Admin Application (Planned)
+  web-user/       # Next.js User Application (Planned)
 
 packages/
   supabase/       # Supabase client, migrations, generated types
-  ui/             # Shared shadcn/ui components
   config-tailwind/ # Shared Tailwind CSS v4 specific to monorepo
   tsconfig/       # Shared TypeScript configs
   eslint-config/  # Shared ESLint configs
@@ -109,10 +109,10 @@ pnpm dev
 2.  **Supabase Auth**: ALWAYS use `auth.uid()` in RLS policies.
 3.  **Type Safety**: ALWAYS use generated types from `packages/supabase` and `TypedSupabaseClient`.
 4.  **Security**: NEVER expose private keys. Provide connection strings via environment variables.
-5.  **Styling**: ALWAYS use `@packages/ui` for components and `@packages/config-tailwind` for design tokens.
+5.  **Styling**: Use local shadcn/ui components in `components/ui`. Using `@packages/config-tailwind` for design tokens is optional but recommended.
 6.  **Architecture**: Packages MUST NOT depend on Apps. Avoid circular dependency between packages.
 7.  **Database**: ALWAYS use `snake_case` for database tables and columns.
-8.  **Styling**: ALWAYS use `@packages/ui` for components and `@packages/config-tailwind` for design tokens.
+
 
 ## Environment Variables
 

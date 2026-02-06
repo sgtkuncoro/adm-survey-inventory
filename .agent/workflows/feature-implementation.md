@@ -33,13 +33,13 @@ Follow this process to deliver high-quality, fully integrated features.
 ## Phase 4: Frontend Implementation [EXECUTION]
 
 6.  **Component Check**:
-    - **Rule**: Check `@packages/ui` for existing components first.
-    - **Action**: If a base component (Atom) is missing, create it in `packages/ui/src` (e.g., `packages/ui/src/badge.tsx`).
+    - **Rule**: Check `local shadcn/ui components` for existing components first.
+    - **Action**: If a base component (Atom) is missing, create it in `components/ui/src` (e.g., `components/ui/src/badge.tsx`).
 
 7.  **Feature UI**:
     - **Reference**: Read `.agent/skills/tailwind-monorepo/SKILL.md` for styling rules.
     - Build the page or feature component in `apps/web`.
-    - Import atoms from `@packages/ui`.
+    - Import atoms from `local shadcn/ui components`.
     - Only build complex, non-reusable components locally in `apps/web`.
 
 8.  **Storybook (Optional)**:

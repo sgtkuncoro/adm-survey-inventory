@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Architecture & Monorepo Structure
 
 ## Workspace Structure
@@ -6,9 +10,9 @@ This project uses Turborepo with pnpm workspaces.
 
 - `apps/worker`: Hono application on Cloudflare Workers (Backend API)
 - `apps/docs`: Storybook documentation and design system (Current UI focus)
-- `apps/web`: Next.js 15 application (Planned Frontend)
+- `apps/web-admin`: Next.js 14 application (Planned Frontend Admin)
+- `apps/web-user`: Next.js 14 application (Planned Frontend User)
 - `packages/supabase`: Supabase migrations, client initialization, and type generation
-- `packages/ui`: Shared UI components (shadcn/ui), Tailwind configuration
 - `packages/utils`: Shared utility functions (date formatting, calculation logic)
 - `packages/tsconfig`: Shared TypeScript configurations
 - `packages/eslint-config`: Shared ESLint configurations
@@ -16,11 +20,11 @@ This project uses Turborepo with pnpm workspaces.
 ## Dependency Flow
 
 - **Strict Direction**: `apps` depend on `packages`. `packages` should NOT depend on `apps`.
-- **Sibling Dependencies**: `packages` can depend on other `packages` (e.g., `packages/db` might use `packages/utils`), but avoid circular dependencies.
+- **Sibling Dependencies**: `packages` can depend on other `packages` (e.g., `packages/supabase` might use `packages/utils`), but avoid circular dependencies.
 
 ## Shared Configuration
 
-- **Tailwind**: Tailwind config is central in `packages/ui` or `packages/config` and extended by apps.
+- **Tailwind**: Tailwind config is central in `packages/config` and extended by apps.
 - **TypeScript**: Base `tsconfig.json` in `packages/tsconfig`. Apps extend `base` or `next` configs.
 
 ## Environment Variables

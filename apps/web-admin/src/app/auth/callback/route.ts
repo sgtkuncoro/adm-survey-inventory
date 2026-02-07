@@ -1,9 +1,11 @@
-import { NextResponse } from "next/server";
 import { createServerClient } from "@/utils/supabase/server";
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
+  // The `/auth/callback` route is required for the server-side auth flow
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  // if "next" is in param, use it as the redirect URL
   const next = searchParams.get("next") ?? "/";
 
   if (code) {
@@ -24,5 +26,5 @@ export async function GET(request: Request) {
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/login?error=Invalid auth code`);
+  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
 }

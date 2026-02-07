@@ -60,8 +60,8 @@ export default function SurveyFeedPage() {
     <div className="container mx-auto py-8 px-4 max-w-5xl">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Available Surveys</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl font-bold">Available Surveys</h1>
+          <p className="text-sm text-muted-foreground mt-1">
             Complete surveys to earn rewards.
           </p>
         </div>

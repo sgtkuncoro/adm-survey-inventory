@@ -1,10 +1,10 @@
-import { createServerClient as createClient } from "@packages/supabase";
+import { createServerClient, createAdminClient } from "@packages/supabase";
 import { cookies } from "next/headers";
 
-export async function createServerClient() {
+export async function createSupabaseServer() {
   const cookieStore = await cookies();
 
-  return createClient(
+  return createServerClient(
     {
       SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL!,
       SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -13,7 +13,7 @@ export async function createServerClient() {
       getAll() {
         return cookieStore.getAll();
       },
-      setAll(cookiesToSet) {
+      setAll(cookiesToSet: any[]) {
         try {
           cookiesToSet.forEach(({ name, value, options }) =>
             cookieStore.set(name, value, options),
@@ -25,5 +25,18 @@ export async function createServerClient() {
         }
       },
     },
+    {
+      cookieOptions: {
+        name: "sb-user-session",
+      },
+    },
   );
+}
+
+export function createSupabaseAdmin() {
+  return createAdminClient({
+    SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  });
 }

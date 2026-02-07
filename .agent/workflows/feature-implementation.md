@@ -35,11 +35,13 @@ Follow this process to deliver high-quality, fully integrated features.
 6.  **Component Check**:
     - **Rule**: Check `local shadcn/ui components` for existing components first.
     - **Action**: If a base component (Atom) is missing, create it in `components/ui/src` (e.g., `components/ui/src/badge.tsx`).
+    - **Forbidden**: Do NOT creating ad-hoc atoms in `apps/web`.
 
 7.  **Feature UI**:
     - **Reference**: Read `.agent/skills/tailwind-monorepo/SKILL.md` for styling rules.
     - Build the page or feature component in `apps/web`.
     - Import atoms from `local shadcn/ui components`.
+    - **Icons**: MUST use `lucide-react`. Do not use any other icon library.
     - Only build complex, non-reusable components locally in `apps/web`.
 
 8.  **Storybook (Optional)**:

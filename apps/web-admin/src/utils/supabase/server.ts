@@ -1,4 +1,4 @@
-import { createServerClient as createClient } from "@packages/supabase";
+import { createServerClient as createClient, createAdminClient } from "@packages/supabase";
 import { cookies } from "next/headers";
 
 export async function createServerClient() {
@@ -25,5 +25,18 @@ export async function createServerClient() {
         }
       },
     },
+    {
+      cookieOptions: {
+        name: "sb-admin-session",
+      },
+    },
   );
+}
+
+export function createSupabaseAdmin() {
+  return createAdminClient({
+    SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  });
 }

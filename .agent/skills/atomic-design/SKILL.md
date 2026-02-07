@@ -22,9 +22,11 @@ This project follows the **Atomic Design** methodology to ensure reusability, co
 ### A. Atoms (`components/ui`)
 
 - **No Business Logic**: Purely presentational.
+- **Priority**: ALWAYS use existing Shadcn UI components over HTML primitives or other libraries.
 - **Props**: Accept `className` (merged via `cn()`) and primitive data.
 - **State**: Local UI state only (e.g., hover, active).
 - **Dependencies**: Only other atoms or utility libs (Tailwind, Radix).
+- **Icons**: Use `lucide-react`. Do NOT use `react-icons` or SVG directly unless absolutely necessary.
 
 ```tsx
 // components/ui/button.tsx
@@ -71,4 +73,4 @@ export function SearchBar() {
     - **Organisms**: `ProfileForm`, `NotificationSettings`.
     - **Molecules**: `AvatarUpload`, `ToggleSwitchWithLabel`.
     - **Atoms**: `Toggle`, `Button`, `Label`.
-3.  **Check**: Do we have the Atoms? Yes -> Build Molecules. No -> Build Atom in `components/ui` first.
+3.  **Check**: Is there a Shadcn UI component for this? Yes -> Use it / Install it. No -> Build Atom in `components/ui`.

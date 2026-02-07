@@ -74,11 +74,12 @@ export const createAdminClient = (env: SupabaseEnv) => {
  * Creates a Browser Client for client-side components.
  * Singleton-ish behavior handled by the library.
  */
-export const createBrowserClient = (env: SupabaseEnv) => {
+export const createBrowserClient = (env: SupabaseEnv, options: any = {}) => {
   return _createBrowserClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {
     db: {
       schema: "public",
     },
+    ...options,
   });
 };
 
@@ -92,6 +93,7 @@ export const createServerClient = (
     getAll: () => any;
     setAll: (cookies: any[]) => void;
   },
+  options: any = {},
 ) => {
   // console.log("Creating Server Client", { supabaseUrl: env.SUPABASE_URL, hasKey: !!env.SUPABASE_ANON_KEY, fn: typeof _createServerClient });
   if (typeof _createServerClient !== "function") {
@@ -105,5 +107,6 @@ export const createServerClient = (
     db: {
       schema: "public",
     },
+    ...options,
   });
 };

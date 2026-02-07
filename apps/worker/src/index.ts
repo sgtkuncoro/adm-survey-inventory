@@ -52,6 +52,15 @@ app.use("/api/*", async (c, next) => {
   const headers = authHeader ? { Authorization: authHeader } : undefined;
   const supabase = createWorkerClient(c.env, headers);
   c.set("db", supabase);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    c.set("user", user);
+  }
+
   await next();
 });
 

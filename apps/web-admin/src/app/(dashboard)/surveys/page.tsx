@@ -290,20 +290,20 @@ export default function SurveysPage() {
   ], []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-2">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Survey Inventory</h1>
-          <p className="text-gray-500 mt-1">External survey opportunities from API providers</p>
+      <div className="flex items-center justify-between px-2">
+        <div className="space-y-1">
+          <h1 className="text-lg font-semibold tracking-tight">Survey Inventory</h1>
+          <p className="text-sm text-muted-foreground">External survey opportunities from API providers</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 text-sm text-gray-500 bg-white px-3 py-1.5 rounded-full border shadow-sm">
-            <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-orange-400 animate-pulse' : 'bg-emerald-500'}`} />
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className={`w-1.5 h-1.5 rounded-full ${isLoading ? 'bg-orange-400 animate-pulse' : 'bg-emerald-500'}`} />
             Last synced: {stats?.lastSync ? formatDistanceToNow(new Date(stats.lastSync), { addSuffix: true }) : 'Never'}
           </div>
-          <Button onClick={() => refetch()} className="bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm">
-            <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+          <Button onClick={() => refetch()} size="sm" className="h-8 text-xs bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm">
+            <RefreshCw className={`mr-2 h-3.5 w-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             Sync Now
           </Button>
         </div>

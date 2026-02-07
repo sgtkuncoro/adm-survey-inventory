@@ -195,12 +195,12 @@ export default function LogsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">API Logs</h1>
-          <p className="text-gray-500 mt-1">
+      <div className="flex items-center justify-between px-2">
+        <div className="space-y-1">
+          <h1 className="text-lg font-semibold tracking-tight">API Logs</h1>
+          <p className="text-sm text-muted-foreground">
             History of external API requests and sync operations
           </p>
         </div>
